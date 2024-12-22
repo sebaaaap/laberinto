@@ -6,12 +6,25 @@ resultado = fun.leer(namefile)
 
 if resultado != None : 
    movimientos = fun.recolectarmovs(resultado)
-#    print(movimientos[2])
+#    print(movimientos)
    laberinto = fun.crearmatriz(resultado)
 #    print(laberinto)
+   inicio = fun.buscarInicio(laberinto)
+#    print(inicio)
+   contenido = fun.verificar_ubicacion(laberinto, inicio)
+#    print(contenido)
+   llave = fun.recogerllave(contenido)
+#    print(llave)
+   avanzar = fun.run(contenido)
+#    print(avanzar)
 
-#    print(resultado)
+   total = fun.points_total(['a','b','c'])
+#    print(total)
 
+
+   result = fun.moverse(laberinto, inicio, movimientos)
+
+   print(result)
 
 else:
    print('file sin contenido lol')
