@@ -63,6 +63,7 @@ def recogerllave(contenido):
           return True
      return None
 
+
 def points_total(lista):
      total = 0
      for letra in lista:
@@ -76,21 +77,39 @@ def points_total(lista):
                total +=0
      return total
 
-def ejecutar(movimientos, laberinto, opcion):
-     if opcion == '1': # no pesca ni K ni P
-          print('soy la opcion: ', opcion)
-     if opcion == '2': # pesca k y P
-          print('soy la opcion: ', opcion)
-     if opcion == '3': # = , y recolecta puntos
-          print('soy la opcion: ', opcion)
-     else: 
-          print('ingrese una opcion correcta')
+def ejecutar(movimientos, init, laberinto, opcion):
+    if opcion == '1':  # No pesca ni K ni P
+        resultado_1 = moverse(laberinto, init, movimientos)
+        if resultado_1:
+            print('Salió correctamente')
+        else:
+            print('No salió')
+
+    elif opcion == '2':  # Pesca K y P
+        resultado_2 = moverse2(laberinto, init, movimientos)
+        if resultado_2:
+            print('Salió correctamente')
+        else:
+            print('No salió')
+
+    elif opcion == '3':  # Igual, y recolecta puntos
+        resultado_3 = moverse3(laberinto, init, movimientos)
+        if resultado_3[0]:
+            score = points_total(resultado_3[1])
+            print(f'Salió con un total de puntos: ', score)
+        else:
+            print('No salió')
+
+    else:
+        print('Ingrese una opción correcta')
+
 
 def moverse(laberinto, inicio, movimientos):
     fila = inicio[0]
     columna = inicio[1]
     continuar = True
     salio = False
+    
 
     while continuar:
         for letra in movimientos:
@@ -152,5 +171,111 @@ def moverse(laberinto, inicio, movimientos):
 
     return salio
 
+def moverse2(laberinto, inicio, movimientos):
+    fila = inicio[0]
+    columna = inicio[1]
+    continuar = True
+    salio = False
+    llave = False  # Indica si ya se recogió la llave
 
-          
+    while continuar:
+        for letra in movimientos:
+            # Determinar nueva posición basada en el movimiento
+            if letra == 'W' and fila > 0:  # Movimiento hacia arriba
+                newfila, newcolumna = fila - 1, columna
+            elif letra == 'S' and fila < len(laberinto) - 1:  # Movimiento hacia abajo
+                newfila, newcolumna = fila + 1, columna
+            elif letra == 'A' and columna > 0:  # Movimiento hacia la izquierda
+                newfila, newcolumna = fila, columna - 1
+            elif letra == 'D' and columna < len(laberinto[0]) - 1:  # Movimiento hacia la derecha
+                newfila, newcolumna = fila, columna + 1
+            else:
+                continuar = False  # Movimiento inválido
+                continuar = False
+                return salio
+
+            # Verificar contenido de la nueva posición
+            contenido = verificar_ubicacion(laberinto, (newfila, newcolumna))
+            verif = run(contenido)
+
+            if verif:  # Si el movimiento es válido
+                if contenido == 'K':  # Recoger llave
+                    llave = True
+                elif contenido == 'P':  # Encontrar puerta
+                    if llave:  # Solo puede avanzar si tiene la llave
+                        llave = False
+                        continuar = True  # Continúa moviéndose
+                    else:  # No puede pasar sin la llave
+                        print('falta una llave')
+                        continuar = False
+                        return salio  # Terminar el bucle y devolver el resultado
+                elif contenido == 'S':  # Encontrar salida
+                    salio = True
+                    continuar = False
+                    return salio  # Salir del bucle y devolver el resultado
+
+                # Actualizar posición actual
+                fila, columna = newfila, newcolumna
+            else:
+                continuar = False  # Movimiento inválido
+                return salio  # Salir del bucle y devolver el resultado
+
+    return salio
+
+def moverse3(laberinto, inicio, movimientos):
+    fila = inicio[0]
+    columna = inicio[1]
+    continuar = True
+    salio = False
+    llave = False 
+    puntos = []
+
+    while continuar:
+        for letra in movimientos:
+            # Determinar nueva posición basada en el movimiento
+            if letra == 'W' and fila > 0:  # Movimiento hacia arriba
+                newfila, newcolumna = fila - 1, columna
+            elif letra == 'S' and fila < len(laberinto) - 1:  # Movimiento hacia abajo
+                newfila, newcolumna = fila + 1, columna
+            elif letra == 'A' and columna > 0:  # Movimiento hacia la izquierda
+                newfila, newcolumna = fila, columna - 1
+            elif letra == 'D' and columna < len(laberinto[0]) - 1:  # Movimiento hacia la derecha
+                newfila, newcolumna = fila, columna + 1
+            else:
+                continuar = False  # Movimiento inválido
+                continuar = False
+                return salio
+
+            # Verificar contenido de la nueva posición
+            contenido = verificar_ubicacion(laberinto, (newfila, newcolumna))
+            verif = run(contenido)
+
+            if verif:  # Si el movimiento es válido
+                if contenido == 'K':  # Recoger llave
+                    llave = True
+                if contenido == 'P':  # Encontrar puerta
+                    if llave:  # Solo puede avanzar si tiene la llave
+                        llave = False
+                        continuar = True # Continúa moviéndose
+                    else:  # No puede pasar sin la llave
+                        print('falta una llave')
+                        continuar = False
+                        return salio , puntos  # Terminar el bucle y devolver el resultado
+                if contenido == 'a':
+                    puntos.append(contenido)
+                if contenido == 'b':
+                    puntos.append(contenido)
+                if contenido == 'c':
+                    puntos.append(contenido)
+                elif contenido == 'S':  # Encontrar salida
+                    salio = True
+                    continuar = False
+                    return salio, puntos # Salir del bucle y devolver el resultado
+
+                # Actualizar posición actual
+                fila, columna = newfila, newcolumna
+            else:
+                continuar = False  # Movimiento inválido
+                return salio  # Salir del bucle y devolver el resultado
+
+    return salio, puntos

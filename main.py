@@ -22,9 +22,11 @@ if resultado != None :
 #    print(total)
 
 
-   result = fun.moverse(laberinto, inicio, movimientos)
+#    result = fun.moverse2(laberinto, inicio, movimientos)
+#    print(result)
 
-   print(result)
+   prueba = fun.ejecutar(movimientos,inicio,laberinto,'3')
+   
 
 else:
    print('file sin contenido lol')
