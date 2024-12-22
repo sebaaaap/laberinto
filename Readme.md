@@ -1,6 +1,6 @@
 ahora: 
 main.py para probar funciones
-logica.py donde estan las funciones 
+- logica.py donde estan las funciones 
 
 masrato: 
 estara todo en solo un .py y funcionando bacano
