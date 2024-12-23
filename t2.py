@@ -35,15 +35,12 @@ def crearmatriz(lista):
 
 
 def buscarInicio(matriz):
-   
     for i in range(len(matriz)):
-         fila = matriz[i]
-
-         for j in range(len(fila)):
-              if fila[j] == 'E' : 
-                   return (i,j)
-              
-    return None
+        fila = matriz[i]
+        for j in range(len(fila)):
+            if fila[j] == 'E':
+                return i, j  # Devuelve los valores separados
+    return -1, -1
 
 def verificar_ubicacion(matriz, cordenada):
      fila = cordenada[0]
@@ -52,6 +49,12 @@ def verificar_ubicacion(matriz, cordenada):
      if contenido == None:
           return None
      return contenido
+
+def verificar_ubicacion2(matriz, cordenada):
+    fila, colum = cordenada
+    if 0 <= fila < len(matriz) and 0 <= colum < len(matriz[0]):
+        return matriz[fila][colum]
+    return None
 
 def run(contenido):
      if contenido == '*':
@@ -69,42 +72,41 @@ def points_total(lista):
      for letra in lista:
           if letra == 'a':
                total += 10000
-          if letra == 'b':
+          elif letra == 'b':
                total += 1000
-          if letra == 'c':
+          elif letra == 'c':
                total += 100
-          else:
-               total +=0
      return total
 
 def ejecutar(movimientos, inicio, laberinto, opcion):
     if opcion == '1':  # No pesca ni K ni P
         resultado_1 = moverse(laberinto, inicio, movimientos)
         if resultado_1[0]:
-            print(f'Coordenadas: {resultado_1[1]},{resultado_1[2]}')
+            print("Coordenadas: " + str(resultado_1[1]) + "," + str(resultado_1[2]))
             print('Ha logrado salir!')
         else:
-            print(f'Coordenadas: {resultado_1[1]},{resultado_1[2]}')
+            print("Coordenadas: " + str(resultado_1[1]) + "," + str(resultado_1[2]))
 
     elif opcion == '2':  # Pesca K y P
         resultado_2 = moverse2(laberinto, inicio, movimientos)
         if resultado_2[0]:
-            print(f'Coordenadas: {resultado_2[1]},{resultado_2[2]}')
+            print("Coordenadas: " + str(resultado_2[1]) + "," + str(resultado_2[2]))
             print('Ha logrado salir!')
         else:
-            print(f'Coordenadas: {resultado_2[1]},{resultado_2[2]}')
+            print("Coordenadas: " + str(resultado_2[1]) + "," + str(resultado_2[2]))
 
     elif opcion == '3':  # Igual, y recolecta puntos
         resultado_3 = moverse3(laberinto, inicio, movimientos)
         if resultado_3[0]:
             score = points_total(resultado_3[3])
-            print(f'Coordenadas: {resultado_3[1]},{resultado_3[2]}')
+            print("Coordenadas: " + str(resultado_3[1]) + "," + str(resultado_3[2]))
             print('Ha logrado salir!')
-            print(f'Puntaje: ',score)
+            print("Puntaje: " + str(score))
         else:
             score = points_total(resultado_3[3])
-            print(f'Coordenadas: {resultado_3[1]},{resultado_3[2]}')
-            print(f'Puntaje: ',score)
+            print("Coordenadas: " + str(resultado_3[1]) + "," + str(resultado_3[2]))
+            print("Puntaje: " + str(score))
+            print(resultado_3[3])
 
     else:
         return
@@ -181,11 +183,6 @@ def moverse(laberinto, inicio, movimientos):
 
     return salio, fila, columna
 
-def verificar_ubicacion2(matriz, cordenada):
-    fila, colum = cordenada
-    if 0 <= fila < len(matriz) and 0 <= colum < len(matriz[0]):
-        return matriz[fila][colum]
-    return None
 
 
 def moverse2(laberinto, inicio, movimientos):
@@ -251,31 +248,26 @@ def moverse3(laberinto, inicio, movimientos):
 
         # Validar si la nueva posición está dentro de los límites
         contenido = verificar_ubicacion2(laberinto, (newfila, newcolumna))
-        if contenido is not None:  # Solo se ejecuta si la posición es válida
-            if contenido != '*':  # No es una pared
-                if contenido == 'K':  # Recoger llave
-                    llave += 1
-                if contenido == 'a':
-                    puntos.append(contenido)
-                if contenido == 'b':
-                    puntos.append(contenido)
-                if contenido == 'c':
-                    puntos.append(contenido)
+        if contenido is not None and contenido != '*':  # Si es válida y no es una pared
+            if contenido == 'K':  # Recoger llave
+                llave += 1
+            elif contenido in ['a', 'b', 'c']:  # Recolectar puntos
+                puntos.append(contenido)
+            elif contenido == 'P':  # Encontrar puerta
+                if llave > 0:  # Solo puede pasar si tiene llave
+                    llave -= 1
+                else:
+                    # No puede pasar, no actualizamos posición
+                    newfila, newcolumna = fila, columna
+            elif contenido == 'S':  # Encontrar salida
+                salio = True
+                return salio, newfila, newcolumna, puntos
 
-                elif contenido == 'P':  # Puerta
-                    if llave > 0:
-                        llave -= 1  # Usar una llave
-                    else:
-                        # No se puede pasar, regresar a la posición anterior
-                        newfila, newcolumna = fila, columna
-                elif contenido == 'S':  # Salida
-                    salio = True
-                    return salio, newfila, newcolumna, puntos
-
-                # Actualizar la posición
-                fila, columna = newfila, newcolumna
+            # Actualizar posición solo si el movimiento es válido
+            fila, columna = newfila, newcolumna
 
     return salio, fila, columna, puntos
+
 
 
 
