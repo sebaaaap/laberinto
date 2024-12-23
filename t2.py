@@ -106,7 +106,7 @@ def ejecutar(movimientos, inicio, laberinto, opcion):
             score = points_total(resultado_3[3])
             print("Coordenadas: " + str(resultado_3[1]) + "," + str(resultado_3[2]))
             print("Puntaje: " + str(score))
-            print(resultado_3[3])
+           
 
     else:
         return
@@ -232,6 +232,7 @@ def moverse3(laberinto, inicio, movimientos):
     salio = False
     llave = 0  # Indica si ya se recogió la llave
     puntos = []
+    visitados = []  # Lista para almacenar posiciones ya visitadas
 
     for letra in movimientos:
         newfila, newcolumna = fila, columna
@@ -252,7 +253,9 @@ def moverse3(laberinto, inicio, movimientos):
             if contenido == 'K':  # Recoger llave
                 llave += 1
             elif contenido in ['a', 'b', 'c']:  # Recolectar puntos
-                puntos.append(contenido)
+                if (newfila, newcolumna) not in visitados:  # Solo si no ha sido visitada antes
+                    puntos.append(contenido)
+                    visitados.append((newfila, newcolumna))  # Marcar como visitada
             elif contenido == 'P':  # Encontrar puerta
                 if llave > 0:  # Solo puede pasar si tiene llave
                     llave -= 1
@@ -267,6 +270,7 @@ def moverse3(laberinto, inicio, movimientos):
             fila, columna = newfila, newcolumna
 
     return salio, fila, columna, puntos
+
 
 
 
