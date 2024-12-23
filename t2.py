@@ -79,7 +79,7 @@ def points_total(lista):
      return total
 
 def ejecutar(movimientos, inicio, laberinto, opcion):
-    if opcion == '1':  # No pesca ni K ni P
+    if opcion == '1':  
         resultado_1 = moverse(laberinto, inicio, movimientos)
         if resultado_1[0]:
             print("Coordenadas: " + str(resultado_1[1]) + "," + str(resultado_1[2]))
@@ -87,7 +87,7 @@ def ejecutar(movimientos, inicio, laberinto, opcion):
         else:
             print("Coordenadas: " + str(resultado_1[1]) + "," + str(resultado_1[2]))
 
-    elif opcion == '2':  # Pesca K y P
+    elif opcion == '2':  
         resultado_2 = moverse2(laberinto, inicio, movimientos)
         if resultado_2[0]:
             print("Coordenadas: " + str(resultado_2[1]) + "," + str(resultado_2[2]))
@@ -95,7 +95,7 @@ def ejecutar(movimientos, inicio, laberinto, opcion):
         else:
             print("Coordenadas: " + str(resultado_2[1]) + "," + str(resultado_2[2]))
 
-    elif opcion == '3':  # Igual, y recolecta puntos
+    elif opcion == '3':  
         resultado_3 = moverse3(laberinto, inicio, movimientos)
         if resultado_3[0]:
             score = points_total(resultado_3[3])
@@ -188,38 +188,39 @@ def moverse(laberinto, inicio, movimientos):
 def moverse2(laberinto, inicio, movimientos):
     fila, columna = inicio
     salio = False
-    llave = 0  # Indica si ya se recogió la llave
+    llave = 0  # indica si ya se recogió la llave
 
     for letra in movimientos:
         newfila, newcolumna = fila, columna
 
-        # Determinar nueva posición basada en el movimiento
-        if letra == 'W':  # Arriba
+        # dterminar nueva posición basada en el movimiento
+        if letra == 'W':  
             newfila -= 1
-        elif letra == 'S':  # Abajo
+        elif letra == 'S':  
             newfila += 1
-        elif letra == 'A':  # Izquierda
+        elif letra == 'A':  
             newcolumna -= 1
-        elif letra == 'D':  # Derecha
+        elif letra == 'D':
             newcolumna += 1
 
-        # Validar si la nueva posición está dentro de los límites
+        
         contenido = verificar_ubicacion2(laberinto, (newfila, newcolumna))
-        if contenido is not None:  # Solo se ejecuta si la posición es válida
-            if contenido != '*':  # No es una pared
-                if contenido == 'K':  # Recoger llave
+        if contenido is not None:  
+            if contenido != '*':  # no es una pared
+                if contenido == 'K':  # recoger llave
                     llave += 1
-                elif contenido == 'P':  # Puerta
+                elif contenido == 'P':  # puerta
                     if llave > 0:
-                        llave -= 1  # Usar una llave
+                        llave -= 1  # usa una llave
                     else:
-                        # No se puede pasar, regresar a la posición anterior
+                        # no se puede pasar
                         newfila, newcolumna = fila, columna
-                elif contenido == 'S':  # Salida
+
+                elif contenido == 'S':  # Salio
                     salio = True
                     return salio, newfila, newcolumna
 
-                # Actualizar la posición
+                # actualizar la posición
                 fila, columna = newfila, newcolumna
 
     return salio, fila, columna
@@ -230,43 +231,43 @@ def moverse2(laberinto, inicio, movimientos):
 def moverse3(laberinto, inicio, movimientos):
     fila, columna = inicio
     salio = False
-    llave = 0  # Indica si ya se recogió la llave
+    llave = 0 
     puntos = []
-    visitados = []  # Lista para almacenar posiciones ya visitadas
+    visitados = []  # lista para almacenar posiciones ya visitadas
 
     for letra in movimientos:
         newfila, newcolumna = fila, columna
 
-        # Determinar nueva posición basada en el movimiento
-        if letra == 'W':  # Arriba
+        # determinar nueva posición basada en el movimiento
+        if letra == 'W':  
             newfila -= 1
-        elif letra == 'S':  # Abajo
+        elif letra == 'S': 
             newfila += 1
-        elif letra == 'A':  # Izquierda
+        elif letra == 'A':  
             newcolumna -= 1
-        elif letra == 'D':  # Derecha
+        elif letra == 'D':  
             newcolumna += 1
 
-        # Validar si la nueva posición está dentro de los límites
+        # validaa si la nueva posición está dentro de los límites
         contenido = verificar_ubicacion2(laberinto, (newfila, newcolumna))
-        if contenido is not None and contenido != '*':  # Si es válida y no es una pared
+        if contenido is not None and contenido != '*': 
             if contenido == 'K':  # Recoger llave
                 llave += 1
-            elif contenido in ['a', 'b', 'c']:  # Recolectar puntos
-                if (newfila, newcolumna) not in visitados:  # Solo si no ha sido visitada antes
+            elif contenido in ['a', 'b', 'c']:  # recolectar puntos
+                if (newfila, newcolumna) not in visitados:  # solo si no ha sido visitada antes
                     puntos.append(contenido)
-                    visitados.append((newfila, newcolumna))  # Marcar como visitada
-            elif contenido == 'P':  # Encontrar puerta
-                if llave > 0:  # Solo puede pasar si tiene llave
+                    visitados.append((newfila, newcolumna))  # almacenar los visitado
+            elif contenido == 'P':  # encontrar puerta
+                if llave > 0:  # solo puede pasar si tiene llave
                     llave -= 1
                 else:
-                    # No puede pasar, no actualizamos posición
+                    # no puede pasar, no actualizamos posición
                     newfila, newcolumna = fila, columna
             elif contenido == 'S':  # Encontrar salida
                 salio = True
                 return salio, newfila, newcolumna, puntos
 
-            # Actualizar posición solo si el movimiento es válido
+            # actualizar posición solo si el movimiento es válido
             fila, columna = newfila, newcolumna
 
     return salio, fila, columna, puntos
