@@ -176,7 +176,7 @@ def moverse2(laberinto, inicio, movimientos):
     columna = inicio[1]
     continuar = True
     salio = False
-    llave = False  # Indica si ya se recogió la llave
+    llave = 0  # Indica si ya se recogió la llave
 
     while continuar:
         for letra in movimientos:
@@ -200,10 +200,10 @@ def moverse2(laberinto, inicio, movimientos):
 
             if verif:  # Si el movimiento es válido
                 if contenido == 'K':  # Recoger llave
-                    llave = True
+                    llave += 1
                 elif contenido == 'P':  # Encontrar puerta
                     if llave:  # Solo puede avanzar si tiene la llave
-                        llave = False
+                        llave -= 1
                         continuar = True  # Continúa moviéndose
                     else:  # No puede pasar sin la llave
                         print('falta una llave')
@@ -227,7 +227,7 @@ def moverse3(laberinto, inicio, movimientos):
     columna = inicio[1]
     continuar = True
     salio = False
-    llave = False 
+    llave = 0
     puntos = []
 
     while continuar:
@@ -252,10 +252,10 @@ def moverse3(laberinto, inicio, movimientos):
 
             if verif:  # Si el movimiento es válido
                 if contenido == 'K':  # Recoger llave
-                    llave = True
+                    llave += 1
                 if contenido == 'P':  # Encontrar puerta
                     if llave:  # Solo puede avanzar si tiene la llave
-                        llave = False
+                        llave -= 1
                         continuar = True # Continúa moviéndose
                     else:  # No puede pasar sin la llave
                         print('falta una llave')
@@ -285,6 +285,10 @@ def moverse3(laberinto, inicio, movimientos):
 namefile =input('ingrese el nombre del archivo: ')
 opcion = input('ingrese la opcion: ')
 resultado = leer(namefile)
+
+while namefile not in ['caso1.txt', 'caso2.txt', 'caso3.txt']:
+    print("Opción inválida. Por favor, ingrese una opción válida (1, 2 o 3).")
+    namefile = input('Ingrese la opción (caso1.txt, caso2.txt o caso3.txt): ')
 
 while opcion not in ['1', '2', '3']:
     print("Opción inválida. Por favor, ingrese una opción válida (1, 2 o 3).")

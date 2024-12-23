@@ -25,7 +25,7 @@ if resultado != None :
 #    result = fun.moverse2(laberinto, inicio, movimientos)
 #    print(result)
 
-   prueba = fun.ejecutar(movimientos,inicio,laberinto,'3')
+   prueba = fun.ejecutar(movimientos,inicio,laberinto,'2')
    
 
 else:

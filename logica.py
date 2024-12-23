@@ -176,7 +176,7 @@ def moverse2(laberinto, inicio, movimientos):
     columna = inicio[1]
     continuar = True
     salio = False
-    llave = False  # Indica si ya se recogió la llave
+    llaves = 0  # Contador de llaves recogidas
 
     while continuar:
         for letra in movimientos:
@@ -191,7 +191,6 @@ def moverse2(laberinto, inicio, movimientos):
                 newfila, newcolumna = fila, columna + 1
             else:
                 continuar = False  # Movimiento inválido
-                continuar = False
                 return salio
 
             # Verificar contenido de la nueva posición
@@ -200,13 +199,13 @@ def moverse2(laberinto, inicio, movimientos):
 
             if verif:  # Si el movimiento es válido
                 if contenido == 'K':  # Recoger llave
-                    llave = True
+                    llaves += 1  # Incrementar contador de llaves
                 elif contenido == 'P':  # Encontrar puerta
-                    if llave:  # Solo puede avanzar si tiene la llave
-                        llave = False
+                    if llaves > 0:  # Solo puede avanzar si tiene al menos una llave
+                        llaves -= 1  # Usar una llave para abrir la puerta
                         continuar = True  # Continúa moviéndose
-                    else:  # No puede pasar sin la llave
-                        print('falta una llave')
+                    else:  # No puede pasar sin una llave
+                        print('Falta una llave')
                         continuar = False
                         return salio  # Terminar el bucle y devolver el resultado
                 elif contenido == 'S':  # Encontrar salida
@@ -221,6 +220,7 @@ def moverse2(laberinto, inicio, movimientos):
                 return salio  # Salir del bucle y devolver el resultado
 
     return salio
+
 
 def moverse3(laberinto, inicio, movimientos):
     fila = inicio[0]

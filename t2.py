@@ -81,7 +81,8 @@ def ejecutar(movimientos, init, laberinto, opcion):
     if opcion == '1':  # No pesca ni K ni P
         resultado_1 = moverse(laberinto, init, movimientos)
         if resultado_1:
-            print('Salioo')
+            print(f'Coordenadas: {resultado_1[1]},{resultado_1[2]}')
+            print('Ha logrado salir!')
         else:
             print('No salio na')
 
@@ -126,6 +127,7 @@ def moverse(laberinto, inicio, movimientos):
                         if win == 'S':  # Si encuentra la salida
                             salio = True
                             continuar = False
+                            return salio, fila, columna
                     else:
                         continuar = False
 
@@ -140,6 +142,7 @@ def moverse(laberinto, inicio, movimientos):
                         if win == 'S':  
                             salio = True
                             continuar = False
+                            return salio, fila, columna
                     else:
                         continuar = False
 
@@ -154,6 +157,7 @@ def moverse(laberinto, inicio, movimientos):
                         if win == 'S':  
                             salio = True
                             continuar = False
+                            return salio, fila, columna
                     else:
                         continuar = False
 
@@ -168,18 +172,18 @@ def moverse(laberinto, inicio, movimientos):
                         if win == 'S':  
                             salio = True
                             continuar = False
+                            return salio, fila, columna
                     else:
                         continuar = False
 
-    return salio
+    return salio, fila, columna
 
 def moverse2(laberinto, inicio, movimientos):
     fila = inicio[0]
     columna = inicio[1]
     continuar = True
     salio = False
-    llave = 0  # Indica si ya se recogió la 
-    
+    llave = 0  # Indica si ya se recogió la llave
 
     while continuar:
         for letra in movimientos:
@@ -193,9 +197,7 @@ def moverse2(laberinto, inicio, movimientos):
             elif letra == 'D' and columna < len(laberinto[0]) - 1:  # Movimiento hacia la derecha
                 newfila, newcolumna = fila, columna + 1
             else:
-                continuar = False  # Movimiento inválido
-                continuar = False
-                return salio, fila, columna  
+                return salio, fila, columna  # Movimiento inválido, se termina el bucle
 
             # Verificar contenido de la nueva posición
             contenido = verificar_ubicacion(laberinto, (newfila, newcolumna))
@@ -205,25 +207,25 @@ def moverse2(laberinto, inicio, movimientos):
                 if contenido == 'K':  # Recoger llave
                     llave += 1
                 elif contenido == 'P':  # Encontrar puerta
-                    if llave:  # Solo puede avanzar si tiene la llave
-                        llave -= 1
-                        continuar = True  # Continúa moviéndose
+                    if llave > 0:  # Solo puede pasar si tiene la llave
+                        llave -= 1  # Usar una llave
+                        fila, columna = newfila, newcolumna  # Actualizar la posición
                     else:  # No puede pasar sin la llave
                         print('falta una llave')
-                        continuar = False
-                        return salio, fila, columna    # Terminar el bucle y devolver el resultado
+                        return salio, fila, columna  # Terminar el bucle y devolver el resultado
                 elif contenido == 'S':  # Encontrar salida
                     salio = True
-                    continuar = False
-                    return salio , fila, columna  # Salir del bucle y devolver el resultado
+                    fila, columna = newfila, newcolumna  # Actualizar la posición
+                    return salio, fila, columna  # Salir del bucle y devolver el resultado
 
-                # Actualizar posición actual
+                # Si no hay puertas ni salida, simplemente actualizar la posición
                 fila, columna = newfila, newcolumna
-            else:
-                continuar = False  # Movimiento inválido
-                return salio, fila, columna    # Salir del bucle y devolver el resultado
+            else:  # Movimiento inválido
+                return salio, fila, columna  # Salir del bucle y devolver el resultado
 
-    return salio, fila, columna 
+    return salio, fila, columna
+
+
 
 def moverse3(laberinto, inicio, movimientos):
     fila = inicio[0]
@@ -289,9 +291,7 @@ namefile =input('ingrese el nombre del archivo: ')
 opcion = input('ingrese la opcion: ')
 resultado = leer(namefile)
 
-while namefile not in ['caso1.txt', 'caso2.txt', 'caso3.txt']:
-    print("Opción inválida. Por favor, ingrese una opción válida (1, 2 o 3).")
-    namefile = input('Ingrese la opción (caso1.txt, caso2.txt o caso3.txt): ')
+
 
 while opcion not in ['1', '2', '3']:
     print("Opción inválida. Por favor, ingrese una opción válida (1, 2 o 3).")
