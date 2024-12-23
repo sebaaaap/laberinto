@@ -288,7 +288,7 @@ resultado = leer(namefile)
 
 while namefile not in ['caso1.txt', 'caso2.txt', 'caso3.txt']:
     print("Opción inválida. Por favor, ingrese una opción válida (1, 2 o 3).")
-    namefile = input('Ingrese la opción (caso1.txt, caso2.txt o caso3.txt): ')
+    opcion = input('Ingrese la opción (caso1.txt, caso2.txt o caso3.txt): ')
 
 while opcion not in ['1', '2', '3']:
     print("Opción inválida. Por favor, ingrese una opción válida (1, 2 o 3).")

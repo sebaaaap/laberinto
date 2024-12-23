@@ -77,34 +77,34 @@ def points_total(lista):
                total +=0
      return total
 
-def ejecutar(movimientos, init, laberinto, opcion):
+def ejecutar(movimientos, inicio, laberinto, opcion):
     if opcion == '1':  # No pesca ni K ni P
-        resultado_1 = moverse(laberinto, init, movimientos)
+        resultado_1 = moverse(laberinto, inicio, movimientos)
         if resultado_1:
             print(f'Coordenadas: {resultado_1[1]},{resultado_1[2]}')
             print('Ha logrado salir!')
         else:
-            print('No salio na')
+            print(f'Coordenadas: {resultado_1[1]},{resultado_1[2]}')
 
     elif opcion == '2':  # Pesca K y P
-        resultado_2 = moverse2(laberinto, init, movimientos)
+        resultado_2 = moverse2(laberinto, inicio, movimientos)
         if resultado_2:
             print(f'Coordenadas: {resultado_2[1]},{resultado_2[2]}')
             print('Ha logrado salir!')
         else:
-            print('No salio na')
+            print(f'Coordenadas: {resultado_2[1]},{resultado_2[2]}')
 
     elif opcion == '3':  # Igual, y recolecta puntos
-        resultado_3 = moverse3(laberinto, init, movimientos)
+        resultado_3 = moverse3(laberinto, inicio, movimientos)
         if resultado_3[0]:
             score = points_total(resultado_3[3])
             print(f'Coordenadas: {resultado_3[1]},{resultado_3[2]}')
             print(f'Puntaje: ',score)
         else:
-            print('No salio na')
+            print(f'Coordenadas: {resultado_3[1]},{resultado_3[2]}')
 
     else:
-        print('Ingrese una opción correcta')
+        return
 
 
 def moverse(laberinto, inicio, movimientos):
@@ -210,8 +210,7 @@ def moverse2(laberinto, inicio, movimientos):
                     if llave > 0:  # Solo puede pasar si tiene la llave
                         llave -= 1  # Usar una llave
                         fila, columna = newfila, newcolumna  # Actualizar la posición
-                    else:  # No puede pasar sin la llave
-                        print('falta una llave')
+                    else:  
                         return salio, fila, columna  # Terminar el bucle y devolver el resultado
                 elif contenido == 'S':  # Encontrar salida
                     salio = True
